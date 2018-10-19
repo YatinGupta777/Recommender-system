@@ -220,14 +220,6 @@ class PopularityRecommender:
     
 popularity_model = PopularityRecommender(item_popularity_df, articles_df)
 
-'''Evaluating Popularity model ''' 
-
-print('Evaluating Popularity recommendation model...')
-pop_global_metrics, pop_detailed_results_df = model_evaluator.evaluate_model(popularity_model)
-print('\nGlobal metrics:\n%s' % pop_global_metrics)
-pop_detailed_results_df.head(10)
-
-
 '''Content-Based Filtering model'''
 #Ignoring stopwords (words with no semantics) from English and Portuguese (as we have a corpus with mixed languages)
 stopwords_list = stopwords.words('english') + stopwords.words('portuguese')
@@ -325,12 +317,6 @@ class ContentBasedRecommender:
         return recommendations_df
     
 content_based_recommender_model = ContentBasedRecommender(articles_df)    
-    
-'''Evaluating content based model'''
-#print('Evaluating Content-Based Filtering model...')
-cb_global_metrics, cb_detailed_results_df = model_evaluator.evaluate_model(content_based_recommender_model)
-#print('\nGlobal metrics:\n%s' % cb_global_metrics)
-#cb_detailed_results_df.head(10)  
 
 
 '''Collaborative Filtering model'''
@@ -393,13 +379,6 @@ class CFRecommender:
     
 cf_recommender_model = CFRecommender(cf_preds_df, articles_df)
 
-
-'''Evaluating CF model'''
-#print('Evaluating Collaborative Filtering (SVD Matrix Factorization) model...')
-cf_global_metrics, cf_detailed_results_df = model_evaluator.evaluate_model(cf_recommender_model)
-#print('\nGlobal metrics:\n%s' % cf_global_metrics)
-#cf_detailed_results_df.head(10)
-
 '''Hybrid Recommender'''
 class HybridRecommender:
     
@@ -447,6 +426,36 @@ class HybridRecommender:
     
 hybrid_recommender_model = HybridRecommender(content_based_recommender_model, cf_recommender_model, articles_df)
 
+'''Comparing the methods'''
+global_metrics_df = pd.DataFrame([pop_global_metrics, cf_global_metrics, cb_global_metrics, hybrid_global_metrics]) \
+                        .set_index('modelName')
+#global_metrics_df
+#%matplotlib inline
+
+'''Evaluating models'''
+
+'''Evaluating Popularity model ''' 
+
+#print('Evaluating Popularity recommendation model...')
+pop_global_metrics, pop_detailed_results_df = model_evaluator.evaluate_model(popularity_model)
+#print('\nGlobal metrics:\n%s' % pop_global_metrics)
+pop_detailed_results_df.head(10)
+
+    
+'''Evaluating content based model'''
+#print('Evaluating Content-Based Filtering model...')
+cb_global_metrics, cb_detailed_results_df = model_evaluator.evaluate_model(content_based_recommender_model)
+#print('\nGlobal metrics:\n%s' % cb_global_metrics)
+#cb_detailed_results_df.head(10)  
+
+
+
+'''Evaluating CF model'''
+#print('Evaluating Collaborative Filtering (SVD Matrix Factorization) model...')
+cf_global_metrics, cf_detailed_results_df = model_evaluator.evaluate_model(cf_recommender_model)
+#print('\nGlobal metrics:\n%s' % cf_global_metrics)
+#cf_detailed_results_df.head(10)
+
 
 '''Evaluating hybrid model'''
 #print('Evaluating Hybrid model...')
@@ -454,11 +463,7 @@ hybrid_global_metrics, hybrid_detailed_results_df = model_evaluator.evaluate_mod
 #print('\nGlobal metrics:\n%s' % hybrid_global_metrics)
 #hybrid_detailed_results_df.head(10)
 
-'''Comparing the methods'''
-global_metrics_df = pd.DataFrame([pop_global_metrics, cf_global_metrics, cb_global_metrics, hybrid_global_metrics]) \
-                        .set_index('modelName')
-#global_metrics_df
-#%matplotlib inline
+
 
 '''plot of comparison'''
 '''
