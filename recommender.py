@@ -426,9 +426,7 @@ class HybridRecommender:
     
 hybrid_recommender_model = HybridRecommender(content_based_recommender_model, cf_recommender_model, articles_df)
 
-'''Comparing the methods'''
-global_metrics_df = pd.DataFrame([pop_global_metrics, cf_global_metrics, cb_global_metrics, hybrid_global_metrics]) \
-                        .set_index('modelName')
+
 #global_metrics_df
 #%matplotlib inline
 
@@ -439,7 +437,7 @@ global_metrics_df = pd.DataFrame([pop_global_metrics, cf_global_metrics, cb_glob
 #print('Evaluating Popularity recommendation model...')
 pop_global_metrics, pop_detailed_results_df = model_evaluator.evaluate_model(popularity_model)
 #print('\nGlobal metrics:\n%s' % pop_global_metrics)
-pop_detailed_results_df.head(10)
+#pop_detailed_results_df.head(10)
 
     
 '''Evaluating content based model'''
@@ -452,7 +450,7 @@ cb_global_metrics, cb_detailed_results_df = model_evaluator.evaluate_model(conte
 
 '''Evaluating CF model'''
 #print('Evaluating Collaborative Filtering (SVD Matrix Factorization) model...')
-cf_global_metrics, cf_detailed_results_df = model_evaluator.evaluate_model(cf_recommender_model)
+cf_global_metrics,cf_detailed_results_df = model_evaluator.evaluate_model(cf_recommender_model)
 #print('\nGlobal metrics:\n%s' % cf_global_metrics)
 #cf_detailed_results_df.head(10)
 
@@ -463,6 +461,9 @@ hybrid_global_metrics, hybrid_detailed_results_df = model_evaluator.evaluate_mod
 #print('\nGlobal metrics:\n%s' % hybrid_global_metrics)
 #hybrid_detailed_results_df.head(10)
 
+'''Comparing the methods'''
+global_metrics_df = pd.DataFrame([pop_global_metrics, cf_global_metrics, cb_global_metrics, hybrid_global_metrics]) \
+                        .set_index('modelName')
 
 
 '''plot of comparison'''
@@ -487,9 +488,10 @@ def inspect_interactions(person_id, test_set=True):
                                                                           'title', 'url', 'lang']]
 
 #Testing for a user
-                          
+                         
+'''Artciles interacted with to get idea about user'''                            
 ans =inspect_interactions(-1479311724257856983, test_set=False).head(20)
-
+'''recommendations'''
 hybrid_result_ans=hybrid_recommender_model.recommend_items(-1479311724257856983, topn=20, verbose=True)
 
 
